@@ -5,7 +5,7 @@ const commonEdit = {
   fontSize: '1em',
   boxShadow: '5px 5px 5px rgba(0,0,0,0.7)',
   background: 'yellow',
-}
+};
 
 const commonPreview = {
   position: 'absolute',
@@ -22,11 +22,11 @@ const commonPreview = {
   border: '1px solid #ccc',
   borderRadius: '5px',
   boxShadow: '5px 5px 5px rgba(0,0,0,0.7)',
-}
+};
 
 const commonRendered = {
   cursor: 'pointer',
-}
+};
 
 export default {
   inline: {
@@ -60,4 +60,4 @@ export default {
       ...commonRendered,
     },
   },
-}
+};

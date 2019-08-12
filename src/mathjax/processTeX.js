@@ -1,33 +1,33 @@
-let pendingScripts = []
-let pendingCallbacks = []
-let needsProcess = false
+let pendingScripts = [];
+let pendingCallbacks = [];
+let needsProcess = false;
 
 function doProcess(MathJax) {
   MathJax.Hub.Queue(() => {
-    const oldElementScripts = MathJax.Hub.elementScripts
+    const oldElementScripts = MathJax.Hub.elementScripts;
     // voir https://github.com/mathjax/MathJax/blob/master/unpacked/MathJax.js#L2445
-    MathJax.Hub.elementScripts = (/* element */) => pendingScripts
+    MathJax.Hub.elementScripts = (/* element */) => pendingScripts;
 
     try {
       return MathJax.Hub.Process(null, () => {
         // Trigger all of the pending callbacks before clearing them
         // out.
-        pendingCallbacks.forEach(cb => cb())
+        pendingCallbacks.forEach((cb) => cb());
         // for (const callback of pendingCallbacks) {
         //   callback()
         // }
 
-        pendingScripts = []
-        pendingCallbacks = []
-        needsProcess = false
-      })
+        pendingScripts = [];
+        pendingCallbacks = [];
+        needsProcess = false;
+      });
     } catch (e) {
       // IE8 requires `catch` in order to use `finally`
-      throw e
+      throw e;
     } finally {
-      MathJax.Hub.elementScripts = oldElementScripts
+      MathJax.Hub.elementScripts = oldElementScripts;
     }
-  })
+  });
 }
 
 /**
@@ -37,11 +37,11 @@ function doProcess(MathJax) {
  * @param {Function} callback
  */
 export default function processTeX(MathJax, script, callback) {
-  pendingScripts.push(script)
-  pendingCallbacks.push(callback)
+  pendingScripts.push(script);
+  pendingCallbacks.push(callback);
   if (!needsProcess) {
-    needsProcess = true
-    setTimeout(() => doProcess(MathJax), 0)
+    needsProcess = true;
+    setTimeout(() => doProcess(MathJax), 0);
   }
 }
 
