@@ -800,7 +800,7 @@ export default {
   z: [
     'zeta',
   ],
-}
+};
 
 
 // Environments
