@@ -12,8 +12,7 @@ function insertInlineTeX(editorState) {
 
   let teX = '';
 
-  // si la selection est étendue, utiliser le texte sélectionné
-  // pour initialiser la formule
+  // initialize the selection for a formula, if any
   if (!selection.isCollapsed()) {
     const blockKey = selection.getStartKey();
     if (blockKey === selection.getEndKey()) {
@@ -29,9 +28,9 @@ function insertInlineTeX(editorState) {
       selection,
       'backward',
     );
+
     selection = contentState.getSelectionAfter();
   }
-
 
   contentState = contentState.createEntity(
     'INLINETEX',
@@ -87,8 +86,4 @@ function insertTeXBlock(editorState) {
   );
 }
 
-export default function insertTeX(editorState, block = false) {
-  if (block) { return insertTeXBlock(editorState); }
-  return insertInlineTeX(editorState);
-}
-
+export const insertTeX = (editorState, block) => block ? insertTeXBlock(editorState) : insertInlineTeX(editorState);

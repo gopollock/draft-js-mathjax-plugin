@@ -2,9 +2,9 @@ import {
   getDefaultKeyBinding,
   KeyBindingUtil,
   EditorState,
-  // convertToRaw,
 } from 'draft-js';
-import insertTeX from './modifiers/insertTeX';
+
+import { insertTeX } from './modifiers/insertTeX';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -17,31 +17,29 @@ export const insertTeXToState = (
   setEditorState(
     insertTeX(editorState, block),
   );
-}
+};
+
+const KEY_CODES = {
+  m: 77,
+  l: 76
+};
 
 export const myKeyBindingFn = (getEditorState, setEditorState) => (e) => {
-  // J'aurais préféré CTRL+$ que CTRL+M, mais cela semble
-  // un peu compliqué car chrome gère mal e.key.
-  // if (e.key === '$' && hasCommandModifier(e))
-  if (e.keyCode === /* m */ 77 && hasCommandModifier(e)) {
+  if (e.keyCode === KEY_CODES.m && hasCommandModifier(e)) {
     return 'insert-texblock';
   }
-  if (e.key === /* $ */ '$' /* && hasCommandModifier(e)*/) {
+
+  if (e.key === '$') {
     const c = getEditorState().getCurrentContent();
     const s = getEditorState().getSelection();
-    // if (!s.isCollapsed()) return 'insert-inlinetex';
     const bk = s.getStartKey();
     const b = c.getBlockForKey(bk);
     const offset = s.getStartOffset() - 1;
     if (b.getText()[offset] === '\\') {
       return `insert-char-${e.key}`;
     }
-    // return 'insert-inlinetex';
   }
-  // if (e.key === '*') {
-  //   return 'test'
-  // }
-  // gestion du cursor au cas où il est situé près d'une formule
+
   if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
     const d = e.key === 'ArrowRight' ? 'r' : 'l';
     const s = getEditorState().getSelection();
@@ -64,11 +62,10 @@ export const myKeyBindingFn = (getEditorState, setEditorState) => (e) => {
     }
   }
 
-  // insert TeX on `ctrl/cmd+l` shortcut
-  if (e.keyCode === 76 && (e.ctrlKey || e.metaKey)) {
+  if (e.keyCode === KEY_CODES.l && (e.ctrlKey || e.metaKey)) {
     e.preventDefault();
     insertTeXToState(getEditorState, setEditorState, false)
-  };
+  }
 
   return getDefaultKeyBinding(e);
 };

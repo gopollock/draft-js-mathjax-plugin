@@ -56,7 +56,10 @@ export default class TeXBlock extends Component {
   getInitialState() {
     const { block } = this.props;
     const teX = block.getData().get('teX');
-    return { editMode: teX.length === 0, teX };
+    return {
+      editMode: teX.length === 0,
+      teX
+    };
   }
 
   componentWillMount() {
@@ -76,12 +79,10 @@ export default class TeXBlock extends Component {
   render() {
     const { editMode, teX, displaystyle } = this.state;
 
-    const store = this.props.blockProps.getStore();
-    const completion = store.completion;
+    const completion = this.props.blockProps.getStore().completion;
 
     let input = null;
     if (editMode) {
-      // className={'TeXBlock-edit'}
       input = (
         <TeXInput
           onChange={this.onChange}
@@ -104,9 +105,7 @@ export default class TeXBlock extends Component {
     const style = styles[(editMode ? 'preview' : 'rendered')];
     return (
       <div
-        style={{ position: editMode ?
-          'relative' : undefined,
-        }}
+        style={{ position: editMode ? 'relative' : undefined }}
       >
         {input}
         <div

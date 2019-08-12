@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import processTeX from '../mathjax/processTeX';
 
-/**
- * React component to render maths using mathjax
- */
 class MathJaxNode extends Component {
   constructor(props) {
     super(props);
@@ -28,9 +25,6 @@ class MathJaxNode extends Component {
     }
   }
 
-  /**
-   * Prevent update when the tex has not changed
-   */
   shouldComponentUpdate(nextProps, nextState) {
     return (
       nextProps.children !== this.props.children
@@ -39,17 +33,11 @@ class MathJaxNode extends Component {
     );
   }
 
-  /**
-   * Update the jax, force update if the display mode changed
-   */
   componentDidUpdate(prevProps) {
     const forceUpdate = prevProps.inline !== this.props.inline;
     this.typeset(forceUpdate);
   }
 
-  /**
-   * Clear the math when unmounting the node
-   */
   componentWillUnmount() {
     clearInterval(this.annul);
     this.clear();
@@ -79,9 +67,6 @@ class MathJaxNode extends Component {
     return this.script;
   }
 
-  /**
-   * Clear the jax
-   */
   clear() {
     const MathJax = window.MathJax;
 
@@ -95,10 +80,6 @@ class MathJaxNode extends Component {
     }
   }
 
-  /**
-   * Update math in the node.
-   * @param {Boolean} forceUpdate
-   */
   typeset(forceUpdate) {
     const MathJax = window.MathJax;
     const { children, onRender } = this.props;
@@ -126,7 +107,6 @@ class MathJaxNode extends Component {
       );
     }
   }
-
 
   render() {
     if (this.state.ready) {

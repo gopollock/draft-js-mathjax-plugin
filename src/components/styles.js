@@ -9,9 +9,6 @@ const commonEdit = {
 
 const commonPreview = {
   position: 'absolute',
-  /* on centre:
-   * cf https://www.w3.org/Style/Examples/007/center.en.html
-   * */
   left: '50%',
   marginRright: '-50%',
   transform: 'translate(-50%, 0)',
@@ -39,7 +36,7 @@ export default {
     },
     preview: {
       ...commonPreview,
-      top: '200%', /* se réfère à la hauteur de ligne */
+      top: '200%', //refers to line height
     },
     rendered: {
       ...commonRendered,
