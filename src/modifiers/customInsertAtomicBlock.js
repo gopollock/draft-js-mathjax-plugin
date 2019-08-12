@@ -1,11 +1,9 @@
 import { Modifier, genKey, EditorState, ContentBlock, BlockMapBuilder } from 'draft-js';
-// import { List, Repeat } from 'immutable'
 import { isAtEndOfBlock, isAtEndOfContent, isCurrentBlockEmpty } from './utils';
 
 export default function customInsertAtomicBlock(
   editorState,
   data,
-  // character = ' ',
 ) {
   const contentState = editorState.getCurrentContent();
   const selectionState = editorState.getSelection();
@@ -22,7 +20,6 @@ export default function customInsertAtomicBlock(
   const atEndOfBlock = isAtEndOfBlock(afterRemoval, targetSelection);
   const atEndOfContent = isAtEndOfContent(afterRemoval, targetSelection);
 
-  // Ne pas diviser un bloc vide, sauf s'il est à la fin du contenu
   const afterSplit = !currentBlockEmpty || atEndOfContent ?
     Modifier.splitBlock(afterRemoval, targetSelection) :
     afterRemoval;
@@ -31,30 +28,21 @@ export default function customInsertAtomicBlock(
   const asAtomicBlock = Modifier.setBlockType(
     afterSplit,
     insertionTarget,
-    'atomic',
+    'atomic'
   );
-
-  // const charData = CharacterMetadata.create({entity: entityKey})
-  // const charData = CharacterMetadata.create()
 
   const fragmentArray = [
     new ContentBlock({
       key: genKey(),
       type: 'atomic',
-      // text: character,
-      // characterList: List(Repeat(charData, character.length)),
-      data,
+      data
     }),
   ];
 
   if (!atEndOfBlock || atEndOfContent) {
-    // Pour éviter l'insertion d'un bloc vide inutile dans
-    // le cas où le curseur est la fin d'un bloc
     fragmentArray.push(new ContentBlock({
       key: genKey(),
-      type: 'unstyled',
-      // text: '',
-      // characterList: List(),
+      type: 'unstyled'
     }));
   }
 

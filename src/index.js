@@ -6,12 +6,12 @@ import {
   insertTeXToState,
 } from './utils';
 import { loadMathJax, defaultConfig } from 'containers/App/math';
-import initCompletion from './mathjax/completion';
+import { initCompletion } from './mathjax/completion';
 import InlineTeX from './components/InlineTeX';
 import TeXBlock from './components/TeXBlock';
 import MathButton from './components/MathButton';
 
-const createMathjaxPlugin = (config = {}) => {
+export const createMathjaxPlugin = (config = {}) => {
   const {
     macros,
     completion,
@@ -20,7 +20,8 @@ const createMathjaxPlugin = (config = {}) => {
 
   loadMathJax();
 
-  const store = {
+  //store values get updated on initialize call
+  let store = {
     getEditorState: undefined,
     setEditorState: undefined,
     getReadOnly: undefined,
@@ -30,11 +31,16 @@ const createMathjaxPlugin = (config = {}) => {
     teXToUpdate: {},
   };
 
+  const initialize = (pluginStateFunctions) => {
+    store = { ...store, ...pluginStateFunctions, completion: store.completion(pluginStateFunctions.getEditorState()) };
+  };
+
+  // this is the function that opens the editor. gets invoked when button with tex symbol is clicked
   const _insertTeX = (block = false) => {
     const { getEditorState, setEditorState } = store;
     if ( getEditorState && setEditorState ) {
       insertTeXToState(getEditorState, setEditorState, block);
-    };
+    }
   };
 
   const insertChar = (char) => {
@@ -54,8 +60,7 @@ const createMathjaxPlugin = (config = {}) => {
     );
   };
 
-  const keyBindingFn = (e, { getEditorState, setEditorState }) =>
-    myKeyBindingFn(getEditorState, setEditorState)(e);
+  const keyBindingFn = (e, { getEditorState, setEditorState }) => myKeyBindingFn(getEditorState, setEditorState)(e);
 
   const blockRendererFn = (block) => {
     if (
@@ -70,13 +75,7 @@ const createMathjaxPlugin = (config = {}) => {
     return null;
   };
 
-  // l'utilisation des flèches gauche ou droite
-  // amène le curseur sur une formule
   const updateTeX = (key, dir) => {
-    // le composant associé à la formule
-    // se sert de cet indicateur
-    // pour se reconnaître
-    // cf.componentWillReceiveProps
     store.teXToUpdate = { key, dir };
     const editorState = store.getEditorState();
     store.setEditorState(
@@ -87,7 +86,7 @@ const createMathjaxPlugin = (config = {}) => {
     );
   };
 
-  const handleKeyCommand = (command /* ,{ getEditorState, setEditorState } */) => {
+  const handleKeyCommand = (command) => {
     if (command === 'insert-texblock') {
       _insertTeX(true);
       return 'handled';
@@ -96,9 +95,6 @@ const createMathjaxPlugin = (config = {}) => {
       _insertTeX();
       return 'handled';
     }
-    // command de la forme 'enter-inline-math-<dir>-<entityKey>',
-    // lancée lorsque l'utilisateur déplace le curseur
-    // sur une formule à l'aide des flèches gauche/droite(dir:l ou r)
     if (command.slice(0, 16) === 'update-inlinetex') {
       const dir = command.slice(17, 18);
       const entityKey = command.slice(19);
@@ -121,17 +117,7 @@ const createMathjaxPlugin = (config = {}) => {
   };
 
   return {
-    initialize: ({ getEditorState, setEditorState, getReadOnly, setReadOnly, getEditorRef, getProps }) => {
-      store.getEditorState = getEditorState;
-      store.setEditorState = setEditorState;
-      store.getReadOnly = getReadOnly;
-      store.setReadOnly = setReadOnly;
-      store.getEditorRef = getEditorRef;
-      store.getProps = getProps;
-      store.completion = store.completion(getEditorState());
-      // store.completion.mostUsedTeXCommands =
-      //   getInitialMostUsedTeXCmds(getEditorState())
-    },
+    initialize,
     decorators: [{
       strategy: findInlineTeXEntities,
       component: InlineTeX,
@@ -146,5 +132,3 @@ const createMathjaxPlugin = (config = {}) => {
     MathButton: decorateComponentWithProps(MathButton, { _insertTeX }),
   };
 };
-
-export default createMathjaxPlugin;

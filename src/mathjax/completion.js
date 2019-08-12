@@ -63,18 +63,12 @@ function getAllTeX(contentState) {
   const entityMapObj = convertToRaw(contentState).entityMap;
   const entityKeys = Object.keys(entityMapObj);
   const entityMap = entityKeys.map((k) => entityMapObj[k]);
-  // Todo: lorsque drafjs sera en version 0.11.0,
-  // remplacer ce qui précède par
-  // const entityMap = contentState.getBlockMap()
   const blockMap = contentState.getBlockMap();
 
   let allTeX = entityMap
     .filter((e) => e.type === 'INLINETEX')
-  // Todo: lorsque drafjs sera en version 0.11.0,
-  // .filter(e => e.get('type') === 'INLINETEX');;
     .reduce((red, e) => red + e.data.teX, '');
-  // Todo: lorsque drafjs sera en version 0.11.0,
-  // .reduce((red, e) => red + e.get('data').teX, '')
+
   allTeX = blockMap
     .filter((b) => b.getData().mathjax)
     .reduce((red, b) => red + b.getData().teX, allTeX);
@@ -93,7 +87,9 @@ function updateMostUsedTeXCmds(
   mostUsedCommands,
   lastTex,
 ) {
-  if (!mostUsedCommands) { return undefined; }
+  if (!mostUsedCommands) {
+    return undefined;
+  }
   const newest = getMostUsedTeXCmds(newTeX);
   const old = getMostUsedTeXCmds(lastTex);
   const muc = { ...mostUsedCommands };
@@ -125,7 +121,6 @@ function updateMostUsedTeXCmds(
       return nred;
     }, nmuc);
 
-  // console.log(nmuc)
   return nmuc;
 }
 
@@ -139,12 +134,10 @@ function mergeMacros(teXCmds, macros) {
   }, { ...teXCmds });
 }
 
-export default (status, macros) => (editorState) => ({
+export const initCompletion = (status, macros) => (editorState) => ({
   status,
-  teXCommandsAndMacros: (status !== 'none') ?
-    mergeMacros(teXCommands, macros) : undefined,
-  mostUsedTeXCommands: (status !== 'none') ?
-    getInitialMostUsedTeXCmds(editorState) : undefined,
+  teXCommandsAndMacros: (status !== 'none') ? mergeMacros(teXCommands, macros) : undefined,
+  mostUsedTeXCommands: (status !== 'none') ? getInitialMostUsedTeXCmds(editorState) : undefined,
   getLastTeXCommand,
   updateMostUsedTeXCmds(teX, lastTex = '') {
     this.mostUsedTeXCommands = updateMostUsedTeXCmds(

@@ -49,8 +49,7 @@ export function removeBlock(contentState, block, after = 1) {
   const blockBefore = contentState.getBlockBefore(blockKey);
 
   if (!blockAfter && !blockBefore) {
-    // peut mieux faire ...
-    if (block.getType() === 'atomic' && block.getData().mathjax /* ['mathjax'] */) {
+    if (block.getType() === 'atomic' && block.getData().mathjax) {
       return ContentState.createFromText('');
     }
     return contentState;

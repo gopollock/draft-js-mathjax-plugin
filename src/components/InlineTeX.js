@@ -35,30 +35,14 @@ export default class InlineTeX extends Component {
     };
 
     this.onChange = (newState, cb = () => {}) => {
-      // Would not it be better (easier) than the entity
-      // carry the component state (except editMode)?
-      // Requires a big code recovery ...
-
-      // const {editMode, ...data} = newState
-      // const {
-      //   getEditorState: get,
-      //   setEditorState: set,
-      //   entityKey: ek
-      // } = this.props
-      // const es = get()
-      // const cs = es.getCurrentContent()
-      // set(EditorState.set(es, {
-      //   currentContent: cs.mergeEntityData(
-      //     ek, data
-      //   )
-      // }))
-
       this.setState(newState, cb);
     };
 
     this.getCaretPos = () => {
       const { dir } = this.props.getStore().teXToUpdate;
-      if (!dir || dir === 'l') { return this.state.teX.length; }
+      if (!dir || dir === 'l') {
+        return this.state.teX.length;
+      }
       return 0;
     };
 
@@ -82,12 +66,7 @@ export default class InlineTeX extends Component {
             blockKey: offsetKey.split('-')[0],
             ...React.Children.map(children, (c) => ({
               startPos: c.props.start,
-            }))[0],
-            // ...React.Children.map(children, (c) => {
-            //   return {
-            //     startPos: c.props.start,
-            //   }
-            // })[0],
+            }))[0]
           }),
         );
 
@@ -100,7 +79,6 @@ export default class InlineTeX extends Component {
     const contentState = this.getCurrentEditorContent();
     const entity = contentState.getEntity(entityKey);
     const { teX, displaystyle } = entity.getData();
-    // return entity.getData()
 
     return { editMode: teX.length === 0, teX, displaystyle };
   }
@@ -167,7 +145,6 @@ export default class InlineTeX extends Component {
       </MathJaxNode>
     );
 
-    const style = styles[(editMode ? 'preview' : 'rendered')];
     return (
       <span>
         {editMode &&
