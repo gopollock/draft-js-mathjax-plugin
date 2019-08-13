@@ -3,7 +3,6 @@ import {
   KeyBindingUtil,
   EditorState,
 } from 'draft-js';
-
 import { insertTeX } from './modifiers/insertTeX';
 
 const { hasCommandModifier } = KeyBindingUtil;
@@ -62,6 +61,7 @@ export const myKeyBindingFn = (getEditorState, setEditorState) => (e) => {
     }
   }
 
+  // insert TeX on `ctrl/cmd+l` shortcut
   if (e.keyCode === KEY_CODES.l && (e.ctrlKey || e.metaKey)) {
     e.preventDefault();
     insertTeXToState(getEditorState, setEditorState, false)

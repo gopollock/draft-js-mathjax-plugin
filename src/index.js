@@ -5,7 +5,7 @@ import {
   findInlineTeXEntities,
   insertTeXToState,
 } from './utils';
-import { loadMathJax, defaultConfig } from 'containers/App/math';
+import { loadMathJax, defaultConfig } from './mathjax/loadMathJax';
 import { initCompletion } from './mathjax/completion';
 import InlineTeX from './components/InlineTeX';
 import TeXBlock from './components/TeXBlock';
@@ -32,7 +32,11 @@ export const createMathjaxPlugin = (config = {}) => {
   };
 
   const initialize = (pluginStateFunctions) => {
-    store = { ...store, ...pluginStateFunctions, completion: store.completion(pluginStateFunctions.getEditorState()) };
+    store = {
+      ...store,
+      ...pluginStateFunctions,
+      completion: store.completion(pluginStateFunctions.getEditorState())
+    };
   };
 
   // this is the function that opens the editor. gets invoked when button with tex symbol is clicked

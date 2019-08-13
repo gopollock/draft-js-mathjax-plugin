@@ -1,3 +1,6 @@
 lib
 node_modules
 .idea
+
+# since we are not releasing this in any form far
+package-lock.json

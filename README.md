@@ -6,8 +6,6 @@ This plugin allows you to edit math rendered by mathjax. [Give it a try!](https:
 
 It uses the traditional `$` key to insert inline math and `CTRL+M` for block one. (Type `\$` to insert the `$` character)
 
-![demo](https://github.com/efloti/draft-js-mathjax-plugin/raw/master/demo.gif)
-
 ## Installation
 
 ```
