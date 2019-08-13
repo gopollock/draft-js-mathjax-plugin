@@ -86,4 +86,9 @@ function insertTeXBlock(editorState) {
   );
 }
 
-export const insertTeX = (editorState, block) => block ? insertTeXBlock(editorState) : insertInlineTeX(editorState);
+export const insertTeX = (editorState, block) => {
+  if (block) {
+    return insertTeXBlock(editorState);
+  }
+  return insertInlineTeX(editorState);
+};

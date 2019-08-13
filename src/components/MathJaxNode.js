@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import processTeX from '../mathjax/processTeX';
 
+/**
+ * React component to render maths using mathjax
+ */
 class MathJaxNode extends Component {
   constructor(props) {
     super(props);

@@ -5,18 +5,12 @@ let needsProcess = false;
 function doProcess(MathJax) {
   MathJax.Hub.Queue(() => {
     const oldElementScripts = MathJax.Hub.elementScripts;
-    // voir https://github.com/mathjax/MathJax/blob/master/unpacked/MathJax.js#L2445
-    MathJax.Hub.elementScripts = (/* element */) => pendingScripts;
+    // see https://github.com/mathjax/MathJax/blob/master/unpacked/MathJax.js#L2445
+    MathJax.Hub.elementScripts = () => pendingScripts;
 
     try {
       return MathJax.Hub.Process(null, () => {
-        // Trigger all of the pending callbacks before clearing them
-        // out.
         pendingCallbacks.forEach((cb) => cb());
-        // for (const callback of pendingCallbacks) {
-        //   callback()
-        // }
-
         pendingScripts = [];
         pendingCallbacks = [];
         needsProcess = false;
