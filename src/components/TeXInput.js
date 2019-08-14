@@ -55,8 +55,8 @@ class TeXInput extends React.Component {
     };
 
     this.completionList = [];
-    this.index = 0;
     // index of the current autosuggestion visible from the whole list of suggestions
+    this.index = 0;
 
     this._onChange = () => onChange({
       teX: this.teXinput.value,
