@@ -29,7 +29,6 @@
     "react": ">=15.0.0",
     "draft-js": ">=0.10.0",
     "immutable": "^3.8.1",
-    "decorate-component-with-props": "^1.0.2",
     "classnames": "^2.2.6"
   },
   "scripts": {

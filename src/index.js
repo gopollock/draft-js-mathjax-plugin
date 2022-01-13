@@ -1,5 +1,5 @@
+import React from 'react';
 import { EditorState, Modifier } from 'draft-js';
-import decorateComponentWithProps from 'decorate-component-with-props';
 import {
   myKeyBindingFn,
   findInlineTeXEntities,
@@ -133,6 +133,6 @@ export const createMathjaxPlugin = (config = {}) => {
     keyBindingFn,
     handleKeyCommand,
     blockRendererFn,
-    MathButton: decorateComponentWithProps(MathButton, { _insertTeX }),
+    MathButton: (props) => <MathButton {...props} _insertTeX={_insertTeX} />,
   };
 };
